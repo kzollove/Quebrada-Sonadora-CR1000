@@ -8,8 +8,14 @@
 			' April 14 2017 - Eric Moore merged this code to accomodate wired sensor set up: Conductivity, pH, CO2, Turbidity, and fDOM
 			' March 2018 - Lisle Snyder added lines to include an Aquatic CO2 meter with analog output, Removed Eureka code lines to save space
 			' March 20 2018 - Lisle Snyder added lines to include water level pressure sensor, moved modem relay to C8
-			' April 16 2018 - Carla López Lloreda fixed mistake between Ct and Cond (were switched around)
+			' April 16 2018 - Carla LÃ³pez Lloreda fixed mistake between Ct and Cond (were switched around)
 			' Sept 17 2018 - Lisle Snyder updated equation for new CO2 meter
+			' Sept 2019 - Kyle Zollo:
+			'		removed Aq_CO2 lines,
+			'		added lines to include EOS CO2 meter,
+			'		corrected Vaisala Channel Argument,
+			'		commented out all lines related to Campbell pH sensor
+			
       
       	
 			'SequentialMode 'Configures data logger to perform tasks sequentially
@@ -78,8 +84,8 @@
       Public SumNO32,SumAbs254,SumAbs350,SumBr,SumL
       Public Nitrate_mgL,Nitrate_um,Absorbance_254,Absorbance_350,Bromide,LightAverage
     
-    Public pHCount 
-    Public pH
+    'Public pHCount 
+    'Public pH
     Public Cond,Ct,Temp2
     Public Turb
     Public TurbNTU
@@ -88,16 +94,18 @@
     Dim Rs
     Public Gain
     
-    Units pHCount=pH
+    'Units pHCount=pH
     Units Cond=mS/cm
     Units Ct=mS/cm
     Units Temp2=Deg C
     Units Turb=mV
     Units fDOM=mV
 	
-	' Aquatic CO2 variables 
-			Public AqCO2_mv(20), AqCO2_ppm(20), temp3, SUMCo2,AqCO2_ppm_avg  
-			Dim N, J
+	' EOS CO2 Variables
+	'S/N GP20190065
+			Public LowEOSCO2_mv(20), LowEOSCO2_ppm(20), LowEOStemp, SUMCO2,LowEOSCO2_ppm_avg  
+			Dim K, J, EOSTempmV, EOSTempC, HighEOSCO2_mv(20), HighEOSCO2_ppm(20), HighEOStemp, SUMHighCO2, HighEOSCO2_ppm_avg
+			Dim L, M
 	   
        
 		'|||||||||||||||||PROGRAM CONSTANTS||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -107,8 +115,8 @@
 			Public ModemFlagOn As Boolean
 			Public BattVolt ' measure the voltage being received
 			
-			Const pHMult=0.0212766
-      Const pHOffs=-5.042553
+			'Const pHMult=0.0212766
+      'Const pHOffs=-5.042553
       
 			'Data Tables
 			DataTable (SUNARaw,1,-1) '-1 for auto-allocate memory.
@@ -128,15 +136,17 @@
 	  Sample (1,Bromide,IEEE4)			  
 	  Sample (1,LightAverage,IEEE4)
 	   Sample (1,pHCount,IEEE4)
-	   Sample (1,pH,IEEE4)
+	   'Sample (1,pH,IEEE4)
      Sample (1,Cond,IEEE4)
      Sample (1,Ct,IEEE4)
      Sample (1,Temp2,FP2)
      Sample (1,Turb,IEEE4)
      Sample (1,fDOM,IEEE4)
      Sample (1,Gain, IEEE4)
-	 Sample (1,AqCO2_ppm_avg, IEEE4)
-	 Sample (1,Lvl_cm, IEEE4)
+	 Sample (1,LowEOSCO2_ppm_avg, IEEE4)
+	 Sample (1, HighEOSCO2_ppm_avg, IEEE4)
+	 Sample (1, EOSTempC, IEEE4)
+            Sample (1,Lvl_cm, IEEE4)
            EndTable  
     
 
@@ -154,15 +164,15 @@
 	  Sample (1,LightAverage2,IEEE4)
 			EndTable       
 			
-			' Aq CO2 tables
-			DataTable (AqCO2Full,1,-1)
+			' Low EOS CO2 tables
+			DataTable (LowEOSCO2Full,1,-1)
 			CardOut (0,100000)
-			Sample(20,AqCO2_mv(),IEEE4)  
-			Sample(20,AqCO2_ppm(),IEEE4)  
+			Sample(20,LowEOSCO2_mv(),IEEE4)  
+			Sample(20,LowEOSCO2_ppm(),IEEE4)  
 			EndTable 
-			DataTable (AqCO2Short,1,-1)
+			DataTable (LowEOSCO2Short,1,-1)
 			CardOut (0,10000)
-      		Sample(1,AqCO2_ppm_avg, IEEE4)
+      		Sample(1,LowEOSCO2_ppm_avg, IEEE4)
 			EndTable 
 
        
@@ -192,39 +202,79 @@
 							    EndSub  
 		 
 		 ''''''''''''''''''''''''''''''
-		 Sub Aq_CO2Measurements
+		 Sub LowEOS_CO2Measurements
+		 	'Lisle says that this temperature data is probably off. It will be here just in case
+		 	VoltDiff(EOSTempmV, 1, mV5000, 2, False, 0, 250, 1 ,0)
+			EOSTempC = (((EOSTempmV/1000)*14) - 20) - 2.106
+			
+			
 			  ' read 20 measurements of CO2 
           For J=1 To 20
-					VoltSe(AqCO2_mv(J), 1, mV2500, 3, False, 0, 250, 1, 0)
+					VoltDiff(LowEOSCO2_mv(J), 1, mV5000, 5, False, 0, 250, 1, 0)
 
 					' calculate CO2 in ppm ' NOTE: use the appropriate regression parameters determined through Calibration!!
 					' convert the voltage from milli volts to Volts and then apply the regression equation for CO2 meter 03123C0D
-					 AqCO2_ppm(J) = (AqCO2_mv(J)/1000 - 1.049) / 0.00195
+					 LowEOSCO2_ppm(J) = (LowEOSCO2_mv(J)/1000 - 0.034194) / 0.00067695
  					Delay(0,100,mSec) 
 					Next J
 							
 					' perform a basic QA/QC to remove  outliers
 					 For J=1 To 20
-					   N=0
-					   SUMCo2=0
-					 temp3=AqCO2_ppm(J)
-					 ' The range of 100 to 2000 ppm is considered valid
-					 If ( temp3 <2000 AND temp3 > 100)
-					SUMCo2=SUMCo2+temp3
-					N=N+1
+					   K=0
+					   SUMCO2=0
+					 LowEOSTemp=LowEOSCO2_ppm(J)
+					 ' The range of 100 to 6000 ppm is considered valid by user manual for EOS
+					 If ( LowEOSTemp <6000 AND LowEOSTemp > 100)
+					SUMCO2=SUMCO2+LowEOSTemp
+					K=K+1
 					 EndIf 
 					Next J
 					' if for some reason there are no valid CO2 values
-					If ( N=0)
-           AqCO2_ppm_avg = NaN
+					If ( K=0)
+           LowEOSCO2_ppm_avg = NaN
            Else
              ' get average of the valid CO2 values
-           AqCO2_ppm_avg = SUMCo2/N 
+           LowEOSCO2_ppm_avg = SUMCO2/K 
 					EndIf
 					
 			   
 			EndSub 
 			
+			
+					 ''''''''''''''''''''''''''''''
+		 Sub HighEOS_CO2Measurements
+
+			  ' read 20 measurements of CO2 
+          For L=1 To 20
+					VoltDiff(HighEOSCO2_mv(L), 1, mV5000, 6, False, 0, 250, 1, 0)
+
+					' calculate CO2 in ppm ' NOTE: use the appropriate regression parameters determined through Calibration!!
+					' convert the voltage from milli volts to Volts and then apply the regression equation for CO2 meter 03123C0D
+					 HighEOSCO2_ppm(J) = (HighEOSCO2_mv(J)/1000 - 0.00783) / 0.00016614
+ 					Delay(0,100,mSec) 
+					Next L
+							
+					' perform a basic QA/QC to remove  outliers
+					 For L=1 To 20
+					   M=0
+					   SUMHighCO2=0
+					 HighEOSTemp=HighEOSCO2_ppm(L)
+					 ' The range of 100 to 24000 ppm is considered valid by user manual for EOS
+					 If ( HighEOSTemp <24000 AND HighEOSTemp > 100)
+					SUMHighCO2=SUMHighCO2+HighEOSTemp
+					M=M+1
+					 EndIf 
+					Next L
+					' if for some reason there are no valid CO2 values
+					If ( M=0)
+           HighEOSCO2_ppm_avg = NaN
+           Else
+             ' get average of the valid CO2 values
+           HighEOSCO2_ppm_avg = SUMHighCO2/K 
+					EndIf
+					
+			   
+			EndSub 
 			''''''''''''''''''''''''''''''''''''''''''
 			Sub WaterLevel_Measurements
 			' Original command was SDI12Recorder(Lvl_cm,C1,"0","M1!",1,0,-1)
@@ -263,20 +313,23 @@
 			        'Delay(0,50,Sec)
 			        '   SDI12Read = TRUE
 				    
-				    Aq_CO2Measurements
+				    LowEOS_CO2Measurements '(wired to Diff 5)
+				    HighEOS_CO2Measurements '(wired to Diff 6)
 					WaterLevel_Measurements
 					
 					'Vaisala CO2 Sensor Generic Single-Ended Voltage measurements 'SEVolt' (wired to SE 1)
-					VoltSe(SEVolt,1,mV5000,4,True,0,_60Hz,1,0)
+					VoltSe(SEVolt,1,mV5000,1,True,0,_60Hz,1,0)
 					
 				 'CS526 ISFET pH Probe measurement 'pH'
-          SerialOpen(Com3,2400,16,0,41)
-          SerialOut(Com3,"1M1!"&CHR(13),"",0,0)
-          SerialIn(RawString2,Com3,50,0,20)
+          
+	  				'''EDITED OUT FOR V12'''
+	  'SerialOpen(Com3,2400,16,0,41)
+          'SerialOut(Com3,"1M1!"&CHR(13),"",0,0)
+          'SerialIn(RawString2,Com3,50,0,20)
             'Parse out 'pHAdd' and 'pHCount' from 'CS526String'
-          SplitStr(pHDigit(),RawString2,"String",2,0)
-          pHCount = pHDigit(2)
-          pH=pHCount*pHMult+pHOffs
+          'SplitStr(pHDigit(),RawString2,"String",2,0)
+          'pHCount = pHDigit(2)
+          'pH=pHCount*pHMult+pHOffs
           
           'CS547A Conductivity and Temperature Probe measurements 'SpC', 'Ct', and 'Temp'
           'Make preliminary voltage measurement
@@ -402,8 +455,8 @@ Gain = 1
 					EndIf
 
 	        CallTable (WQual)
-			CallTable AqCO2Full
-			CallTable AqCO2Short
+			CallTable LowEOSCO2Full
+			CallTable LowEOSCO2Short
 
 			            
        EndIf  
