@@ -90,7 +90,7 @@
     Public Turb
     Public TurbNTU
     Public fDOM
-    Dim RawString2 As String * 20, pHDigit(2)
+    'Dim RawString2 As String * 20, pHDigit(2)
     Dim Rs
     Public Gain
     
@@ -135,7 +135,7 @@
 	  Sample (1,Absorbance_350,IEEE4)			  
 	  Sample (1,Bromide,IEEE4)			  
 	  Sample (1,LightAverage,IEEE4)
-	   Sample (1,pHCount,IEEE4)
+	   'Sample (1,pHCount,IEEE4)
 	   'Sample (1,pH,IEEE4)
      Sample (1,Cond,IEEE4)
      Sample (1,Ct,IEEE4)
