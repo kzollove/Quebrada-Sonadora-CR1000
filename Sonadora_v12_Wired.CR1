@@ -112,7 +112,7 @@
 			
 			Const RavenPort = 8
 			'Public WiperFlagOn As Boolean
-			Public ModemFlagOn As Boolean
+			'Public ModemFlagOn As Boolean
 			Public BattVolt ' measure the voltage being received
 			
 			'Const pHMult=0.0212766
