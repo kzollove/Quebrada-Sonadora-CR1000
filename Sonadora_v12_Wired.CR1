@@ -104,8 +104,8 @@
 	' EOS CO2 Variables
 	'S/N GP20190065
 			Public LowEOSCO2_mv(20), LowEOSCO2_ppm(20), LowEOStemp, SUMCO2,LowEOSCO2_ppm_avg  
-			Dim K, J, EOSTempmV, EOSTempC, HighEOSCO2_mv(20), HighEOSCO2_ppm(20), HighEOStemp, SUMHighCO2, HighEOSCO2_ppm_avg
-			Dim L, M
+			Dim I, J, EOSTempmV, EOSTempC, HighEOSCO2_mv(20), HighEOSCO2_ppm(20), HighEOStemp, SUMHighCO2, HighEOSCO2_ppm_avg
+			Dim N, P
 	   
        
 		'|||||||||||||||||PROGRAM CONSTANTS||||||||||||||||||||||||||||||||||||||||||||||||||
@@ -220,21 +220,21 @@
 							
 					' perform a basic QA/QC to remove  outliers
 					 For J=1 To 20
-					   K=0
+					   I=0
 					   SUMCO2=0
 					 LowEOSTemp=LowEOSCO2_ppm(J)
 					 ' The range of 100 to 6000 ppm is considered valid by user manual for EOS
 					 If ( LowEOSTemp <6000 AND LowEOSTemp > 100)
 					SUMCO2=SUMCO2+LowEOSTemp
-					K=K+1
+					I=I+1
 					 EndIf 
 					Next J
 					' if for some reason there are no valid CO2 values
-					If ( K=0)
+					If ( I=0)
            LowEOSCO2_ppm_avg = NaN
            Else
              ' get average of the valid CO2 values
-           LowEOSCO2_ppm_avg = SUMCO2/K 
+           LowEOSCO2_ppm_avg = SUMCO2/I
 					EndIf
 					
 			   
@@ -245,32 +245,32 @@
 		 Sub HighEOS_CO2Measurements
 
 			  ' read 20 measurements of CO2 
-          For L=1 To 20
-					VoltDiff(HighEOSCO2_mv(L), 1, mV5000, 6, False, 0, 250, 1, 0)
+          For N=1 To 20
+					VoltDiff(HighEOSCO2_mv(N), 1, mV5000, 6, False, 0, 250, 1, 0)
 
 					' calculate CO2 in ppm ' NOTE: use the appropriate regression parameters determined through Calibration!!
 					' convert the voltage from milli volts to Volts and then apply the regression equation for CO2 meter 03123C0D
-					 HighEOSCO2_ppm(J) = (HighEOSCO2_mv(J)/1000 - 0.00783) / 0.00016614
+					 HighEOSCO2_ppm(N) = (HighEOSCO2_mv(N)/1000 - 0.00783) / 0.00016614
  					Delay(0,100,mSec) 
-					Next L
+					Next N
 							
 					' perform a basic QA/QC to remove  outliers
-					 For L=1 To 20
-					   M=0
+					 For N=1 To 20
+					   P=0
 					   SUMHighCO2=0
-					 HighEOSTemp=HighEOSCO2_ppm(L)
+					 HighEOSTemp=HighEOSCO2_ppm(N)
 					 ' The range of 100 to 24000 ppm is considered valid by user manual for EOS
 					 If ( HighEOSTemp <24000 AND HighEOSTemp > 100)
 					SUMHighCO2=SUMHighCO2+HighEOSTemp
-					M=M+1
+					P=P+1
 					 EndIf 
-					Next L
+					Next N
 					' if for some reason there are no valid CO2 values
-					If ( M=0)
+					If ( P=0)
            HighEOSCO2_ppm_avg = NaN
            Else
              ' get average of the valid CO2 values
-           HighEOSCO2_ppm_avg = SUMHighCO2/K 
+           HighEOSCO2_ppm_avg = SUMHighCO2/P 
 					EndIf
 					
 			   
