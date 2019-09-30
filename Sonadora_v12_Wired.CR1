@@ -23,7 +23,7 @@
 			'Variable list
 			'Diagnostic
 			
-		Public PTemp, batt_volt, ComStatus As Boolean,RavenPortOn' measurement variables
+		Public PTemp, batt_volt, RavenPortOn, 'ComStatus As Boolean' measurement variables
 	   Const meas_freq = 15 ' minutes, measurement frequency
 	   Const suna_scans=22 '  number of scans at meas_freq
 	   Const buf_scan=(suna_scans-5) ' buffer scans
