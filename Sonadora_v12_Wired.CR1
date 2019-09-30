@@ -88,7 +88,7 @@
     'Public pH
     Public Cond,Ct,Temp2
     Public Turb
-    Public TurbNTU
+    'Public TurbNTU
     Public fDOM
     'Dim RawString2 As String * 20, pHDigit(2)
     Dim Rs
