@@ -78,7 +78,7 @@
      Alias rTime(9) = Day_of_Year   'assign the alias Day_of_Year to rTime(9)
 	  
 		 ' New Variables to read the SUNA V2 correctly
-      Public  NO3Vals(20), AvgNO3, M, K, L, SUMNO3, temp
+      Public  NO3Vals(20), M, K, L, SUMNO3, temp ', AvgNO3
       Alias K = ValidMeas
       Public NO3Vals2(20), Abs254vals(20),Abs350vals(20),Brvals(20),Lvals(20)
       Public SumNO32,SumAbs254,SumAbs350,SumBr,SumL
