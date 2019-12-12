@@ -15,6 +15,8 @@
 			'		added lines to include EOS CO2 meter,
 			'		corrected Vaisala Channel Argument,
 			'		commented out all lines related to Campbell pH sensor
+			' Dec 2019 - Kyle Zollo:
+			'		fixed Ct variable temp to Temp2
 			
       
       	
@@ -360,7 +362,7 @@
          'Make temperature measurement (Deg C)
         Therm107(Temp2,1,5,2,0,250,1,0)
          'Correct EC for temperature errors
-        Ct=(Cond*100)/((temp-25)*2+100)
+        Ct=(Cond*100)/((Temp2-25)*2+100)
         'Trap measurements below 0.005 mS/cm threshold
         If Ct<0.005 Then Ct=0.005
  
