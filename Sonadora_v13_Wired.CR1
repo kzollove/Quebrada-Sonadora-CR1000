@@ -17,6 +17,9 @@
 			'		commented out all lines related to Campbell pH sensor
 			' Dec 2019 - Kyle Zollo:
 			'		fixed Ct variable temp to Temp2
+			' Feb 2020 - Miguel Leon
+			'		Allow the SUNA to record negative values, the values may go negative due to drift. 
+			' 		Correction of negative values will be completed later. 
 			
       
       	
@@ -423,7 +426,7 @@ Gain = 1
 					 temp=NO3Vals(M)
 					 ' The range of 0 to 10 mgL is considered valid
 					 If ( temp <10)
-					 If(temp > 0)
+					 'If(temp > 0)
 					SUMNO3=SUMNO3+temp
 					
 					' this is a zone for valid numbers only , so pick them up
@@ -433,7 +436,7 @@ Gain = 1
 					SumBr=SumBr+Brvals(M)
 					SumL=SumL+Lvals(M)
 					K=K+1
-					EndIf
+					'EndIf
 					 EndIf 
 					Next M
 					' if for some reason there are no valid CO2 values
