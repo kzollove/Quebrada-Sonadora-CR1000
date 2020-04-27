@@ -22,7 +22,7 @@
 			' 		Correction of negative values will be completed later.
 			' Apr 2020 - Kyle Zollo
 			'		This version of program runs YSI Exo2, SUNA V2, EOS CO2, WaterLevel
-			'		Remove Cond, FDOM, Turb from Program
+			'		Remove Campbell Cond, Vaisala, Cyclops FDOM, Cyclops Turb from Program and table
 			'		Add lines to incorporate YSI Exo2 
 			'		
 
