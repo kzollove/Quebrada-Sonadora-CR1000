@@ -2,3 +2,5 @@
 The source code for the operation of the Campbell Datalogger at Sonadora (Luquillo Critical Zone Observatory)
 
 Currently V14
+
+Wiring diagram last updated: Jul 11 2019
