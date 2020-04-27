@@ -167,6 +167,7 @@
 	  Sample (1,Absorbance_350,IEEE4)			  
 	  Sample (1,Bromide,IEEE4)			  
 	  Sample (1,LightAverage,IEEE4)
+	  Sample(SDI12Vals,YSI(),IEEE4) 
 	   'Sample (1,pHCount,IEEE4)
 	   'Sample (1,pH,IEEE4)
      Sample (1,Cond,IEEE4)
@@ -241,7 +242,8 @@
                	   	Delay(0,5,Sec) 
         	 LCount=1      	   	
 			For i = 1 To SDI12Vals 'Try up to 14 times for valid readings
-						SDI12Recorder (YSI(LCount),5,0,"C!",1.0,0)
+						SDI12Recorder (YSI(LCount),1,0,"C!",1.0,0)	' EXO2 connected to CR1000 port C1 (arg2)
+																	' and SDI12 address 0 (arg3)
 			If YSI(LCount)<>NAN Then ExitFor
 			Next I
 			LCount=LCount+1
