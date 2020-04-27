@@ -119,19 +119,19 @@
     'Public pHCount 
     'Public pH
     'Public Cond,Ct,Temp2
-    Public Turb
-    Public TurbNTU
-    Public fDOM
+    'Public Turb
+    'Public TurbNTU
+    'Public fDOM
     'Dim RawString2 As String * 20, pHDigit(2)
-    Dim Rs
-    Public Gain
+    'Dim Rs
+    'Public Gain
     
     'Units pHCount=pH
     'Units Cond=mS/cm
     'Units Ct=mS/cm
     'Units Temp2=Deg C
-    Units Turb=mV
-    Units fDOM=mV
+    'Units Turb=mV
+    'Units fDOM=mV
 	
 	' EOS CO2 Variables
 	'S/N GP20190065
@@ -173,9 +173,9 @@
      'Sample (1,Cond,IEEE4)
      'Sample (1,Ct,IEEE4)
      'Sample (1,Temp2,FP2)
-     Sample (1,Turb,IEEE4)
-     Sample (1,fDOM,IEEE4)
-     Sample (1,Gain, IEEE4)
+     'Sample (1,Turb,IEEE4)
+     'Sample (1,fDOM,IEEE4)
+     'Sample (1,Gain, IEEE4)
 	 Sample (1,LowEOSCO2_ppm_avg, IEEE4)
 	 Sample (1, HighEOSCO2_ppm_avg, IEEE4)
 	 Sample (1, EOSTempC, IEEE4)
@@ -418,32 +418,32 @@
         'If Ct<0.005 Then Ct=0.005
  
  
- PortSet(1,1)
-Gain = 1
+ 'PortSet(1,1)
+'Gain = 1
      'Measure cdom with Cyclops-7
-  Delay(1,1,sec)
-  VoltDiff(fDOM,1,AutoRange,7,False,0,_60Hz,1,0)
-  If fDOM>4600 Then
-    WriteIO (&B10,&B10)
-    Gain = 1
-    ElseIf fDOM<=440
-      WriteIO (&B10,&B00)
-      Gain = 10
-    EndIf
+ ' Delay(1,1,sec)
+  'VoltDiff(fDOM,1,AutoRange,7,False,0,_60Hz,1,0)
+  'If fDOM>4600 Then
+'    WriteIO (&B10,&B10)
+'    Gain = 1
+'    ElseIf fDOM<=440
+'      WriteIO (&B10,&B00)
+'      Gain = 10
+'    EndIf
 
     'Measure Turbidity with Cyclops-7
-    PortSet(2,1)
+'    PortSet(2,1)
     
-  Delay(1,1,sec)
+'  Delay(1,1,sec)
  ' VoltSe(cDOM,1,AutoRange,14,False,0,_60Hz,1,0)
- VoltDiff(Turb,1,AutoRange,8,False,0,_60Hz,1,0)
-  If Turb>4600 Then
-    WriteIO (&B10,&B10)
-    Gain = 1
-    ElseIf Turb<=440
-      WriteIO (&B10,&B00)
-      Gain = 10
-    EndIf
+' VoltDiff(Turb,1,AutoRange,8,False,0,_60Hz,1,0)
+'  If Turb>4600 Then
+'    WriteIO (&B10,&B10)
+'    Gain = 1
+'    ElseIf Turb<=440
+'      WriteIO (&B10,&B00)
+'      Gain = 10
+'    EndIf
    ' TurbNTU =((Turb/Gain)*600)
     'Turb = ((.8225*Turb)+30.82)
 		  
