@@ -118,7 +118,7 @@
     
     'Public pHCount 
     'Public pH
-    Public Cond,Ct,Temp2
+    'Public Cond,Ct,Temp2
     Public Turb
     Public TurbNTU
     Public fDOM
@@ -127,9 +127,9 @@
     Public Gain
     
     'Units pHCount=pH
-    Units Cond=mS/cm
-    Units Ct=mS/cm
-    Units Temp2=Deg C
+    'Units Cond=mS/cm
+    'Units Ct=mS/cm
+    'Units Temp2=Deg C
     Units Turb=mV
     Units fDOM=mV
 	
@@ -170,9 +170,9 @@
 	  Sample(SDI12Vals,YSI(),IEEE4) 
 	   'Sample (1,pHCount,IEEE4)
 	   'Sample (1,pH,IEEE4)
-     Sample (1,Cond,IEEE4)
-     Sample (1,Ct,IEEE4)
-     Sample (1,Temp2,FP2)
+     'Sample (1,Cond,IEEE4)
+     'Sample (1,Ct,IEEE4)
+     'Sample (1,Temp2,FP2)
      Sample (1,Turb,IEEE4)
      Sample (1,fDOM,IEEE4)
      Sample (1,Gain, IEEE4)
@@ -386,36 +386,36 @@
           
           'CS547A Conductivity and Temperature Probe measurements 'SpC', 'Ct', and 'Temp'
           'Make preliminary voltage measurement
-        BrFull(Rs,1,mV2500,4,1,1,2500,True,True,0,_60Hz,-0.001,1)
+        'BrFull(Rs,1,mV2500,4,1,1,2500,True,True,0,_60Hz,-0.001,1)
           'Convert voltage measurement to resistance
-        Rs=Rs/(1-Rs)
+        'Rs=Rs/(1-Rs)
           'Make refined voltage measurement based on preliminary measurement
-        Select Case Rs
-         Case Is <1.8
-          BrHalf(Rs,1,mV2500,8,1,1,2500,True,0,_60Hz,1,0)
-         Case Is <9.25
-          BrFull(Rs,1,mV2500,4,1,1,2500,True,True,0,_60Hz,-0.001,1)
-         Case Is <280
-          BrFull(Rs,1,mV250,4,1,1,2500,True,True,0,_60Hz,-0.001,1)
-      EndSelect
+        'Select Case Rs
+         'Case Is <1.8
+          'BrHalf(Rs,1,mV2500,8,1,1,2500,True,0,_60Hz,1,0)
+         'Case Is <9.25
+          'BrFull(Rs,1,mV2500,4,1,1,2500,True,True,0,_60Hz,-0.001,1)
+         'Case Is <280
+          'BrFull(Rs,1,mV250,4,1,1,2500,True,True,0,_60Hz,-0.001,1)
+      'EndSelect
         'Convert voltage measurement to resistance
-       Rs=Rs/(1-Rs)
+       'Rs=Rs/(1-Rs)
         'Subtract resistance errors
-       Rs=Rs-(75*0.000032+0.005)
+       'Rs=Rs-(75*0.000032+0.005)
         'Calculate EC
-       Cond=(1/Rs)*1.452
+       'Cond=(1/Rs)*1.452
          'Correct EC for ionization errors
-       If Cond<0.474 Then
-         Cond=Cond*0.95031-0.00378
-        Else
-         Cond=-0.02889+(0.98614*Cond)+(0.02846*Cond^2)
-        EndIf
+       'If Cond<0.474 Then
+        ' Cond=Cond*0.95031-0.00378
+        'Else
+         'Cond=-0.02889+(0.98614*Cond)+(0.02846*Cond^2)
+        'EndIf
          'Make temperature measurement (Deg C)
-        Therm107(Temp2,1,5,2,0,250,1,0)
+        'Therm107(Temp2,1,5,2,0,250,1,0)
          'Correct EC for temperature errors
-        Ct=(Cond*100)/((Temp2-25)*2+100)
+        'Ct=(Cond*100)/((Temp2-25)*2+100)
         'Trap measurements below 0.005 mS/cm threshold
-        If Ct<0.005 Then Ct=0.005
+        'If Ct<0.005 Then Ct=0.005
  
  
  PortSet(1,1)
