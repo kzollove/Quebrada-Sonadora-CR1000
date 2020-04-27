@@ -19,7 +19,13 @@
 			'		fixed Ct variable temp to Temp2
 			' Feb 2020 - Miguel Leon
 			'		Allow the SUNA to record negative values, the values may go negative due to drift. 
-			' 		Correction of negative values will be completed later. 
+			' 		Correction of negative values will be completed later.
+			' Apr 2020 - Kyle Zollo
+			'		This version of program runs YSI Exo2, SUNA V2, EOS CO2, WaterLevel
+			'		Remove Cond, FDOM, Turb from Program
+			'		Add lines to incorporate YSI Exo2 
+			'		
+
 			
       
       	
@@ -72,7 +78,28 @@
       Alias SUNA_parse(8)=Bromide2
       Alias SUNA_parse(9)=LightAverage2
       Alias SUNA_parse(10)=DarkAverage2
-       
+
+	  ' YSI EXO
+	Const SDI12Vals = 12 'max number SDI12 values to be returned
+    Const SDI12Freq = 17 'minutes
+    Public SDI12Read As Boolean
+    Dim LCount
+		Public YSI(SDI12Vals) 'array to hold SDI12 values returned
+		' time variable
+		Dim i
+               
+       Alias YSI(1)=CablePwrV
+       Alias YSI(2)=TempC 
+       Alias YSI(3)=Conductivity 
+       Alias YSI(4)=SpConductivity
+	   Alias YSI(5)=pH
+       Alias YSI(6)=DepthMeter 
+       Alias YSI(7)=ODOPerCent 
+       Alias YSI(8)=ODOMGL 
+       Alias YSI(9)=TurbidityFNU
+       Alias YSI(10)=TurbidityRaw 
+       Alias YSI(11)=FDOMRFU
+       Alias YSI(12)=FDOMQSU 
        
      Alias rTime(1) = Year          'assign the alias Year to rTime(1)
      Alias rTime(2) = Month         'assign the alias Month to rTime(2)
@@ -204,7 +231,25 @@
 						        NextScan								
 			   		            SW12(0)'shut down SUNA
 					  	        SerialClose (Com2) ' 
-							    EndSub  
+							    EndSub 
+
+								''''''''''''''''''''''''''
+			Sub YSIMeasurements
+			 Scan( 65, Sec, 1,1 )   ' scan for roughly 1 minute to allow the ysi to send the data.
+				  Move (YSI(),SDI12Vals,NAN,1)
+				 '    SW12(1) ' switch on power to YSI 
+               	   	Delay(0,5,Sec) 
+        	 LCount=1      	   	
+			For i = 1 To SDI12Vals 'Try up to 14 times for valid readings
+						SDI12Recorder (YSI(LCount),5,0,"C!",1.0,0)
+			If YSI(LCount)<>NAN Then ExitFor
+			Next I
+			LCount=LCount+1
+			
+
+		
+			  NextScan
+		 EndSub
 		 
 		 ''''''''''''''''''''''''''''''
 		 Sub LowEOS_CO2Measurements
@@ -315,8 +360,9 @@
 					FullTime=Day_of_Year +(Hour/24)+(Minute/60)/60
 					  
 			        nitrateMeasurements   	' make nitrate measurement
-			        'Delay(0,50,Sec)
-			        '   SDI12Read = TRUE
+			        Delay(0,50,Sec)
+			        SDI12Read = TRUE
+					YSIMeasurements
 				    
 				    LowEOS_CO2Measurements '(wired to Diff 5)
 				    HighEOS_CO2Measurements '(wired to Diff 6)
