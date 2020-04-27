@@ -61,8 +61,8 @@
 	  
 	  
 	    'Vaisala CO2 Sensor
-		Public SEVolt
-		Units SEVolt=mV
+		'Public SEVolt
+		'Units SEVolt=mV
 	
 			'SUNA
 			Public RawString As String *2000, NBytesReturned As String * 16
@@ -162,7 +162,7 @@
 	  Minimum (1,batt_volt,FP2,0,False)
 	  Sample (1,Nitrate_um,IEEE4)
      Sample (1,Nitrate_mgL,IEEE4)		  
- 	 Sample (1,SEVolt,FP2)
+ 	 'Sample (1,SEVolt,FP2)
  	  Sample (1,Absorbance_254,IEEE4)
 	  Sample (1,Absorbance_350,IEEE4)			  
 	  Sample (1,Bromide,IEEE4)			  
@@ -371,7 +371,7 @@
 					WaterLevel_Measurements
 					
 					'Vaisala CO2 Sensor Generic Single-Ended Voltage measurements 'SEVolt' (wired to SE 1)
-					VoltSe(SEVolt,1,mV5000,1,True,0,_60Hz,1,0)
+					'VoltSe(SEVolt,1,mV5000,1,True,0,_60Hz,1,0)
 					
 				 'CS526 ISFET pH Probe measurement 'pH'
           
