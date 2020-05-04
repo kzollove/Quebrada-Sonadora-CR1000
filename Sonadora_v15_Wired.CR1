@@ -75,7 +75,7 @@
       Alias SUNA_parse(10)=DarkAverage2
 
 	  ' YSI EXO
-	Const SDI12Vals = 12 'max number SDI12 values to be returned
+	Const SDI12Vals = 13 'max number SDI12 values to be returned
     Const SDI12Freq = 17 'minutes
     Public SDI12Read As Boolean
     Dim LCount
