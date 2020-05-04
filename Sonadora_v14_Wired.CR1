@@ -369,9 +369,14 @@
         'Trap measurements below 0.005 mS/cm threshold
         If Ct<0.005 Then Ct=0.005
  
+<<<<<<< Updated upstream
  
  PortSet(1,1)
 Gain = 1
+=======
+ 'PortSet(1,1)
+'Gain = 1
+>>>>>>> Stashed changes
      'Measure cdom with Cyclops-7
   Delay(1,1,sec)
   VoltDiff(fDOM,1,AutoRange,7,False,0,_60Hz,1,0)
