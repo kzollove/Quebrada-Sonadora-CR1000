@@ -93,13 +93,14 @@
        Alias YSI(3)=Conductivity 
        Alias YSI(4)=SpConductivity
 	   Alias YSI(5)=pH
-       Alias YSI(6)=DepthMeter 
-       Alias YSI(7)=ODOPerCent 
-       Alias YSI(8)=ODOMGL 
-       Alias YSI(9)=TurbidityFNU
-       Alias YSI(10)=TurbidityNTU 
-       Alias YSI(11)=FDOMRFU
-       Alias YSI(12)=FDOMQSU 
+	   Alias YSI(6)=pH_mv
+       Alias YSI(7)=DepthMeter 
+       Alias YSI(8)=ODOPerCent 
+       Alias YSI(9)=ODOMGL 
+       Alias YSI(10)=TurbidityFNU
+       Alias YSI(11)=TurbidityNTU 
+       Alias YSI(12)=FDOMRFU
+       Alias YSI(13)=FDOMQSU 
        
      Alias rTime(1) = Year          'assign the alias Year to rTime(1)
      Alias rTime(2) = Month         'assign the alias Month to rTime(2)
