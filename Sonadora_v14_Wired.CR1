@@ -97,7 +97,7 @@
        Alias YSI(7)=ODOPerCent 
        Alias YSI(8)=ODOMGL 
        Alias YSI(9)=TurbidityFNU
-       Alias YSI(10)=TurbidityRaw 
+       Alias YSI(10)=TurbidityNTU 
        Alias YSI(11)=FDOMRFU
        Alias YSI(12)=FDOMQSU 
        
