@@ -86,7 +86,7 @@
     Dim LCount
 		Public YSI(SDI12Vals) 'array to hold SDI12 values returned
 		' time variable
-		Dim i
+		Dim e
                
        Alias YSI(1)=CablePwrV
        Alias YSI(2)=TempC 
@@ -242,11 +242,11 @@
 				 '    SW12(1) ' switch on power to YSI 
                	   	Delay(0,5,Sec) 
         	 LCount=1      	   	
-			For i = 1 To SDI12Vals 'Try up to 14 times for valid readings
+			For e = 1 To SDI12Vals 'Try up to 14 times for valid readings
 						SDI12Recorder (YSI(LCount),1,0,"C!",1.0,0)	' EXO2 connected to CR1000 port C1 (arg2)
 																	' and SDI12 address 0 (arg3)
 			If YSI(LCount)<>NAN Then ExitFor
-			Next I
+			Next e
 			LCount=LCount+1
 			
 
