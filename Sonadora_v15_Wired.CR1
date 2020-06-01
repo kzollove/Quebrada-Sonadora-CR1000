@@ -58,6 +58,18 @@
 		
 		Units Lvl_cm=centimeters
 	  
+
+	  'AccuBubble Pressure Sensor
+		'Dim FRun_accu
+		'Dim Old_accu
+		'Dim Changed_accu
+		Public accu_cm
+		Const accu_off = 70.324
+		Public accu_observed
+		Public accu_lvl_corr
+		Public accu_offset
+		
+		Units accu_cm=centimeters
 	
 			'SUNA
 			Public RawString As String *2000, NBytesReturned As String * 16
@@ -147,6 +159,7 @@
 	 Sample (1, HighEOSCO2_ppm_avg, IEEE4)
 	 Sample (1, EOSTempC, IEEE4)
             Sample (1,Lvl_cm, IEEE4)
+			Sample (1,accu_cm, IEEE4)
            EndTable  
     
 
@@ -299,6 +312,26 @@
 			' Original command was SDI12Recorder(Lvl_cm,C1,"0","M1!",1,0,-1)
 			SDI12Recorder(Lvl_cm,7,"0","M1!",1,0)
 				Lvl_cm=Lvl_cm*70.324
+				'Offset calculation 'Offset'
+			If FRun=0 Then
+				Observed=300
+				FRun=1
+			EndIf
+				Changed=Observed-Old
+			If Changed=0 Then
+				Lvl_corr=Lvl_cm+Offset
+			Else
+				Offset=Observed-Lvl_cm
+				Lvl_corr=Lvl_cm+Offset
+				Old=Observed
+			EndIf
+			EndSub
+
+						 
+			''''''''''''''''''''''''''''''''''''''''''
+			Sub AccuBubble_Measurements
+			SDI12Recorder(accu_cm,5,"0","C1!",1,0) 'C1! is command to use factory calibration in a concurrent measurement
+				accu_cm=accu_cm*accu_off
 				'Offset calculation 'Offset'
 			If FRun=0 Then
 				Observed=300
