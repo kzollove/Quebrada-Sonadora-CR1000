@@ -189,7 +189,7 @@
 			    	Battery (batt_volt)
 						      SW12(1) ' switch on power to SUNA 
 			        		Delay(0,suna_delay,Sec) ' 
-				           	Scan(1550, mSec, 2,suna_scans )   
+				           	Scan(1500, mSec, 2,suna_scans )   
 			     	            SerialInRecord (Com2,RawString,83,0,&H0D0A,NBytesReturned,00) ' read each scan with a start of text character 
 															SplitStr (SUNA_parse(),RawString,0,10,0) 
 													'			AvgRun (SUNA(),10,SUNA_parse(),suna_scans-1) 
