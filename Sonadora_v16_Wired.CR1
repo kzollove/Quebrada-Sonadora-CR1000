@@ -25,7 +25,11 @@
 			'		Remove Campbell Cond, Vaisala, Cyclops FDOM, Cyclops Turb from Program and table
 			'		Add lines to incorporate YSI Exo2 
 			'		
-
+			' Nov 2020 - Kyle Zollo, Lisle Snyder
+			'		Changes to SUNA code to correct the averaging method which was leading to systemically lower nitrate averages
+			'		suna_scans changed from 22 to 11
+			'		variables defined at 115 changed from 20 to 10, For loops at 347 and 364 changed from 20 to 10
+			
 			
       
       	
@@ -36,7 +40,7 @@
 			
 		Public PTemp, batt_volt, ComStatus As Boolean,RavenPortOn' measurement variables
 	   Const meas_freq = 15 ' minutes, measurement frequency
-	   Const suna_scans=22 '  number of scans at meas_freq
+	   Const suna_scans=11 '  number of scans at meas_freq
 	   Const buf_scan=(suna_scans-5) ' buffer scans
 	   Const suna_delay = 35 ' seconds
 	   Const MinBatteryVoltage = 11.2 ' battery voltage at which to stop the SUNA
@@ -106,9 +110,9 @@
      Alias rTime(9) = Day_of_Year   'assign the alias Day_of_Year to rTime(9)
 	  
 		 ' New Variables to read the SUNA V2 correctly
-      Public  NO3Vals(20), AvgNO3, M, K, L, SUMNO3, temp
+      Public  NO3Vals(10), AvgNO3, M, K, L, SUMNO3, temp
       Alias K = ValidMeas
-      Public NO3Vals2(20), Abs254vals(20),Abs350vals(20),Brvals(20),Lvals(20)
+      Public NO3Vals2(10), Abs254vals(10),Abs350vals(10),Brvals(10),Lvals(10)
       Public SumNO32,SumAbs254,SumAbs350,SumBr,SumL
       Public Nitrate_mgL,Nitrate_um,Absorbance_254,Absorbance_350,Bromide,LightAverage
 	
@@ -340,7 +344,7 @@
             ' Go back to the SUNA Data stored in the shorter Raw table
             ' accessthe data table and get the previous 20 values
             ' read all the SUNA NO3 values to a temporary variable.
-            For L=1 To 20
+            For L=1 To 10
             NO3Vals(L)=SUNAShortRaw.Nitrate_mgL2(1,L)
             NO3Vals2(L)=SUNAShortRaw.Nitrate_um2(1,L)
             Abs254vals(L)=SUNAShortRaw.Absorbance_2542(1,L)
@@ -357,7 +361,7 @@
   			   SumAbs350=0
   			   SumBr=0
   			   SumL=0
-          For M=1 To 20
+          For M=1 To 10
 					   
 					 temp=NO3Vals(M)
 					 ' The range of 0 to 10 mgL is considered valid
