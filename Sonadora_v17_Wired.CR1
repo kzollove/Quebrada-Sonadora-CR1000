@@ -29,6 +29,8 @@
 			'		Changes to SUNA code to correct the averaging method which was leading to systemically lower nitrate averages
 			'		suna_scans changed from 22 to 11
 			'		variables defined at 115 changed from 20 to 10, For loops at 347 and 364 changed from 20 to 10
+			' Jan 2021 - Kyle Zollo
+			'		Change calibration coefficients for Eosense GP to match incoming sensor  GP20190066
 			
 			
       
@@ -237,7 +239,8 @@
 
 					' calculate CO2 in ppm ' NOTE: use the appropriate regression parameters determined through Calibration!!
 					' convert the voltage from milli volts to Volts and then apply the regression equation for CO2 meter 03123C0D
-					 LowEOSCO2_ppm(J) = (LowEOSCO2_mv(J)/1000 - 0.034194) / 0.00067695
+					' With calibrations from s/n GP20190066
+					 LowEOSCO2_ppm(J) = (LowEOSCO2_mv(J)/1000 + 0.00645) / 0.00080458
  					Delay(0,100,mSec) 
 					Next J
 							
@@ -273,7 +276,8 @@
 
 					' calculate CO2 in ppm ' NOTE: use the appropriate regression parameters determined through Calibration!!
 					' convert the voltage from milli volts to Volts and then apply the regression equation for CO2 meter 03123C0D
-					 HighEOSCO2_ppm(N) = (HighEOSCO2_mv(N)/1000 - 0.00783) / 0.00016614
+					' With calibrations from s/n GP20190066
+					HighEOSCO2_ppm(N) = (HighEOSCO2_mv(N)/1000 - 0.06832) / (-0.00000105)
  					Delay(0,100,mSec) 
 					Next N
 							
