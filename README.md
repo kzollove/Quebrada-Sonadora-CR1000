@@ -1,7 +1,7 @@
 # Quebrada-Sonadora-CR1000
 The source code for the operation of the Campbell Datalogger at Sonadora (Luquillo Critical Zone Observatory)
 
-Currently V16 (as of Nov 16 2020)
+Currently V17 (as of Jan 29 2021)
 
 Wiring diagram last updated: May 20 2020
 
